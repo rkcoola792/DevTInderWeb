@@ -5,10 +5,10 @@ import Footer from './components/footer'
 
 const Body = () => {
   return (
-    <div>
+    <div className='h-screen'>
       <Navbar/>
       <Outlet/>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   )
 }
