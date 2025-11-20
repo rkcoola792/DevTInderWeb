@@ -1,18 +1,31 @@
 import axios from "axios";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { addUser } from "../store/userSlice";
+import { BASE_URL } from "../utils/constants";
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user);
+  console.log("user from store", user);
   const handleLogin = async (e) => {
     e.preventDefault();
     // Add login logic here
     try {
-      const res =await axios.post("http://localhost:3000/login", {
-        email,
-        password,
-      });
-      console.log("api response", res);
+      const res = await axios.post(
+        BASE_URL + "/login",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true } // to set cookies into the browser
+      );
+      console.log("api response", res.data);
+      dispatch(addUser(res.data));
+      navigate("/feed");
     } catch (err) {
       console.log("Something went wrong", err);
     }
