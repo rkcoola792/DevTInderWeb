@@ -5,7 +5,7 @@ const Feedcard = ({ feed }) => {
   const { name, age, profileImage, bio, skills } = feed;
 
   return (
-    <div className="card bg-base-300 w-96 shadow-sm my-20 mx-auto h-1/2 cursor-pointer">
+    <div className="card bg-base-300 w-96 shadow-sm my-20  h-1/2 cursor-pointer">
       <figure>
         <img
           src={

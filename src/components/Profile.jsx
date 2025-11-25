@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
-
-
+import Feedcard from "./Feedcard";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -13,10 +12,13 @@ const Profile = () => {
     name: user?.name || "",
     age: user?.age || "",
     skills: user?.skills || "",
+    bio: user?.bio || "",
+    profileImage: user?.profileImage || "",
   });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [toast, setToast] = useState(false);
 
   const handleUpdate = async () => {
     try {
@@ -30,8 +32,10 @@ const Profile = () => {
           withCredentials: true,
         }
       );
-
-      setMessage("Profile updated successfully!");
+      setToast(true);
+      setTimeout(() => {
+        setToast(false);
+      }, 3000);
     } catch (err) {
       console.log("Something went wrong", err);
       setMessage("Failed to update profile. Please try again.");
@@ -42,60 +46,73 @@ const Profile = () => {
 
   if (user)
     return (
-      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 my-20 mx-auto">
-        <label className="label">Name</label>
-        <input
-          type="text"
-          className="input"
-          placeholder="Name"
-          value={update.name}
-          onChange={(e) => setUpdate({ ...update, name: e.target.value })}
-        />
-
-        <label className="label">Age</label>
-        <input
-          type="number"
-          className="input"
-          placeholder="Age"
-          value={update.age}
-          onChange={(e) => setUpdate({ ...update, age: e.target.value })}
-        />
-         <label className="label">Bio</label>
-        <input
-          type="number"
-          className="input"
-          placeholder="Age"
-          value={update.age}
-          onChange={(e) => setUpdate({ ...update, bio: e.target.value })}
-        />
-
-        <label className="label">Skills</label>
-        <input
-          type="text"
-          className="input"
-          placeholder="Skills"
-          value={update.skills}
-          onChange={(e) => setUpdate({ ...update, skills: e.target.value })}
-        />
-
-        {message && (
-          <div
-            className={`alert mt-4 ${
-              message.includes("success") ? "alert-success" : "alert-error"
-            }`}
-          >
-            {message}
+      <div div className="flex justify-center items-center gap-20">
+        {toast && (
+          <div className="toast toast-top toast-center">
+            <div className="alert alert-success mt-14">
+              <span>Profile updated.</span>
+            </div>
           </div>
         )}
+        <div>
+          <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-6 my-20 mx-auto">
+            <p className="text-center text-2xl"> Edit Profile</p>
+            <label className="label">Name</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Name"
+              value={update.name}
+              onChange={(e) => setUpdate({ ...update, name: e.target.value })}
+            />
 
-        <button
-          className="btn btn-neutral mt-4"
-          onClick={handleUpdate}
-          disabled={loading}
-        >
-          {loading ? "Updating..." : "Update"}
-        </button>
-      </fieldset>
+            <label className="label">Age</label>
+            <input
+              type="number"
+              className="input"
+              placeholder="Age"
+              value={update.age}
+              onChange={(e) => setUpdate({ ...update, age: e.target.value })}
+            />
+            <label className="label">Bio</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Bio"
+              value={update.bio}
+              onChange={(e) => setUpdate({ ...update, bio: e.target.value })}
+            />
+
+            <label className="label">Skills</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Skills"
+              value={update.skills}
+              onChange={(e) => setUpdate({ ...update, skills: e.target.value })}
+            />
+            <label className="label">Profile Image Link</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Profile Image Link"
+              value={update.profileImage}
+              onChange={(e) =>
+                setUpdate({ ...update, profileImage: e.target.value })
+              }
+            />
+
+            <button
+              className="btn btn-neutral mt-4"
+              onClick={handleUpdate}
+              disabled={loading}
+            >
+              {loading ? "Updating..." : "Update"}
+            </button>
+          </fieldset>
+        </div>
+        <Feedcard feed={user} />
+      </div>
     );
 };
 

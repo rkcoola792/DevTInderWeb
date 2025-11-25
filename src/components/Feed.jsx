@@ -22,7 +22,12 @@ const Feed = () => {
   useEffect(() => {
     getFeed();
   }, []);
-  if (feed) return feed.feed.map((feed) => <Feedcard feed={feed} />);
+  if (feed)
+    return feed.feed.map((feed) => (
+      <div className="mx-auto flex justify-center">
+        <Feedcard feed={feed} />
+      </div>
+    ));
 };
 
 export default Feed;
