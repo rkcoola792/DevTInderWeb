@@ -6,6 +6,7 @@ import Signup from "./components/Signup";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { store } from "./store/store";
 import Feed from "./components/Feed";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           <Route path="signup" element={<Signup />} />
 
           <Route index element={<Feed/>} />
-          <Route path="profile" element={<h1>profile</h1>} />
+          <Route path="profile" element={<Profile/>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
 

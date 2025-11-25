@@ -1,22 +1,47 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
 const Signup = () => {
-  const [userDetails, setUserDetails] = React.useState({
+  const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
     name: "",
     age: "",
     gender: "",
     skills: "",
+    bio: "",
+    profileImage: "",
   });
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [enableSignup, setEnableSignup] = useState(false);
   const handleSignup = async (e) => {
     e.preventDefault();
-    // Add signup logic here
-    const res = await axios.post("http://localhost:3000/signup", userDetails);
-    console.log("api response", res);
+    try {
+      const res = await axios.post(BASE_URL + "/signup", userDetails);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response.data.message);
+      console.log("Something went wrong", err);
+    }
   };
+
+  useEffect(() => {
+    if (
+      userDetails.email &&
+      userDetails.password &&
+      userDetails.name &&
+      userDetails.age &&
+      userDetails.gender &&
+      userDetails.skills &&
+      userDetails.bio &&
+      userDetails.profileImage
+    ) {
+      setEnableSignup(true);
+    }
+  }, [userDetails]);
   return (
     <div className="hero bg-base-200 min-h-[calc(100vh-65px)]">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -55,18 +80,6 @@ const Signup = () => {
                 }
               />
 
-              {/* Password */}
-              <label className="label">Password</label>
-              <input
-                type="password"
-                className="input"
-                placeholder="Password"
-                value={userDetails.password}
-                onChange={(e) =>
-                  setUserDetails({ ...userDetails, password: e.target.value })
-                }
-              />
-
               {/* Age */}
               <label className="label">Age</label>
               <input
@@ -78,7 +91,31 @@ const Signup = () => {
                   setUserDetails({ ...userDetails, age: e.target.value })
                 }
               />
-
+              {/* Bio */}
+              <label className="label">Bio</label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Describe yourself"
+                value={userDetails.bio}
+                onChange={(e) =>
+                  setUserDetails({ ...userDetails, bio: e.target.value })
+                }
+              />
+              {/* Profile image link */}
+              <label className="label">Profile Image link</label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Profile Image link"
+                value={userDetails.profileImage}
+                onChange={(e) =>
+                  setUserDetails({
+                    ...userDetails,
+                    profileImage: e.target.value,
+                  })
+                }
+              />
               {/* Gender */}
               <label className="label">Gender</label>
               <select
@@ -105,9 +142,27 @@ const Signup = () => {
                   setUserDetails({ ...userDetails, skills: e.target.value })
                 }
               />
-
+              {/* Password */}
+              <label className="label">Password</label>
+              <input
+                type="password"
+                className="input"
+                placeholder="Password"
+                value={userDetails.password}
+                onChange={(e) =>
+                  setUserDetails({ ...userDetails, password: e.target.value })
+                }
+              />
+              {error && <p className="text-red-500">{error}</p>}
               {/* Button */}
-              <button className="btn btn-neutral mt-4" onClick={handleSignup}>Signup</button>
+              <button
+                className={`btn btn-neutral mt-4 ${
+                  !enableSignup && "btn-disabled"
+                }`}
+                onClick={handleSignup}
+              >
+                Signup
+              </button>
 
               <span className="text-center mt-2">
                 Already have an account?{" "}

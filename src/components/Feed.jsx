@@ -7,6 +7,7 @@ import { addFeed } from "../store/feedSlice";
 
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
+  console.log("feed");
   const dispatch = useDispatch();
   const getFeed = async () => {
     try {
