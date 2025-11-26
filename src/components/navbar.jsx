@@ -27,7 +27,7 @@ const Navbar = () => {
       console.log("Something went wrong", err);
     }
   };
-
+if(user)
   return (
     <div className="navbar bg-base-300 shadow-sm">
       <div className="flex-1">
